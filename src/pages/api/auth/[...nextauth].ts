@@ -1,10 +1,13 @@
+import bcrypt from 'bcrypt';
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
 import { env } from "../../../env/server.mjs";
+import { isValidPassword } from '../../../utils/verifyData/userData';
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -16,14 +19,48 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
-    // ...add more providers here
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "E-mail", type: "text", placeholder: "Insira seu email" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials, req) {
+
+        console.log('dsad')
+        if (!credentials?.password || !credentials.email) return null;
+
+        if (!isValidPassword(credentials.password)) return null;
+
+
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email
+          },
+          select: {
+            id: true,
+            email: true,
+            image: true,
+            name: true,
+            password_hash: true,
+          }
+        })
+
+        if (!user) return null;
+        
+        const correctPass: boolean = await bcrypt.compare(credentials.password, user.password_hash as string)
+
+        if (!correctPass) return null
+
+        return user;
+        }
+      })
   ],
 };
 

@@ -3,6 +3,9 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import {FcGoogle} from "react-icons/fc";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { trpc } from "../utils/trpc";
 
 
 const Login: NextPage = () => {
@@ -12,7 +15,18 @@ const Login: NextPage = () => {
 
   const loginWithCredentials = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    signIn('credentials', { email, password, callbackUrl:"/" });
+    signIn('credentials', { email, password, redirect: false }).
+      then((res) => {
+        if (res?.ok) {
+          router.push('/')
+        } else {
+          console.log(res?.error);
+          toast.error("Falha ao realizar o login"), {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+          }
+        }
+      });
   }
 
   return (
@@ -46,6 +60,7 @@ const Login: NextPage = () => {
           <p className="mt-8 text-gray-500">Não tem uma conta? <a className="text-blue-600 cursor-pointer" onClick={() => router.push("/signup")}>Clique aqui</a></p>
         </form>
       </div>
+      <ToastContainer />
     </div>
   )
 }

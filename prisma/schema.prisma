@@ -75,6 +75,7 @@ model User {
 model Recipe {
   id          Int      @id @default(autoincrement())
   title       String   @db.VarChar(200)
+  image       String?
   description String   @db.MediumText
   prepTime    Int
   cookTime    Int
@@ -113,10 +114,10 @@ model Ingredient_text {
   id   String @id @default(uuid())
   text String @db.VarChar(500)
 
- // ingredientId    String
- // ingredient_name Ingredient @relation(fields: [ingredientId], references: [id])
-  recipeId        Int
-  recipe          Recipe     @relation(fields: [recipeId], references: [id])
+  // ingredientId    String
+  // ingredient_name Ingredient @relation(fields: [ingredientId], references: [id])
+  recipeId Int
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
 
   @@map("ingredients_texts")
 }
@@ -178,4 +179,10 @@ model Review {
   user     User   @relation(fields: [userId], references: [id])
 
   @@map("review")
+}
+
+enum Difficulty {
+  Facil
+  Medio
+  Dificil
 }

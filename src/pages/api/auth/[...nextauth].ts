@@ -12,7 +12,7 @@ import { isValidPassword } from '../../../utils/verifyData/userData';
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
-    session({ session, user }) {
+    async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
       }
@@ -28,12 +28,9 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-
-        console.log('dsad')
         if (!credentials?.password || !credentials.email) return null;
 
         if (!isValidPassword(credentials.password)) return null;
-
 
         const user = await prisma.user.findUnique({
           where: {
@@ -54,10 +51,17 @@ export const authOptions: NextAuthOptions = {
 
         if (!correctPass) return null
 
-        return user;
+        console.log("dasd", user);
+        return {
+          id: user.id,
+          email: user.email,
+          image: user.image,
+          name: user.name
+        };
         }
-      })
+      }),
   ],
+  secret: process.env.JWT_SECRET
 };
 
 export default NextAuth(authOptions);

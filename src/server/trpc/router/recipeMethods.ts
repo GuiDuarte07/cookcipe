@@ -1,7 +1,7 @@
 import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
-export const recipeMethods = router({
+export const recipeRoutes = router({
   createRecipe: protectedProcedure
     .input(z.object({
       

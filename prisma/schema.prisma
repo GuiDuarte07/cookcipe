@@ -67,7 +67,6 @@ model User {
   recipes          Recipe[]
   favorite_recipes Favorite_repices[]
   like_recipes     Likes_recipes[]
-  comment_recipes  Comment[]
   Review           Review[]
 
   @@map("users")
@@ -93,7 +92,6 @@ model Recipe {
   ingredient_texts Ingredient_text[]
   home_appliance   Home_appliance[]
   steps            Step[]
-  comments         Comment[]
   favorite         Favorite_repices[]
   like             Likes_recipes[]
   Review           Review[]
@@ -101,22 +99,22 @@ model Recipe {
   @@map("recipes")
 }
 
-model Ingredient {
-  id   String @id @default(uuid())
-  name String @db.TinyText
-  unit String @db.VarChar(20)
-
-  ingredient_name Ingredient_text[]
-
-  @@map("ingredients")
-}
+// model Ingredient {
+//  id   String @id @default(uuid())
+//  name String @db.TinyText
+//  unit String @db.VarChar(20)
+//
+//  ingredient_name Ingredient_text[]
+//
+//  @@map("ingredients")
+//}
 
 model Ingredient_text {
   id   String @id @default(uuid())
   text String @db.VarChar(500)
 
-  ingredientId    String
-  ingredient_name Ingredient @relation(fields: [ingredientId], references: [id])
+ // ingredientId    String
+ // ingredient_name Ingredient @relation(fields: [ingredientId], references: [id])
   recipeId        Int
   recipe          Recipe     @relation(fields: [recipeId], references: [id])
 
@@ -141,25 +139,6 @@ model Step {
   recipe   Recipe @relation(fields: [recipeId], references: [id])
 
   @@map("steps")
-}
-
-model Comment {
-  id         String   @id @default(uuid())
-  text       String   @db.VarChar(500)
-  update_at  DateTime @updatedAt
-  created_at DateTime @default(now())
-  visible    Boolean  @default(true)
-
-  replayId String?
-  replay   Comment @relation("replay", fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  userId   String
-  user     User      @relation(fields: [userId], references: [id])
-  recipeId Int
-  recipe   Recipe    @relation(fields: [recipeId], references: [id])
-  Comment  Comment[] @relation("replay")
-
-  @@map("comments")
 }
 
 model Favorite_repices {

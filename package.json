@@ -7,7 +7,8 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.tsx' --write"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.4",
@@ -20,6 +21,7 @@
     "bcrypt": "^5.1.0",
     "next": "12.3.1",
     "next-auth": "^4.12.3",
+    "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.6.0",
@@ -37,9 +39,14 @@
     "@typescript-eslint/parser": "^5.33.0",
     "autoprefixer": "^10.4.7",
     "eslint": "8.22.0",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-config-next": "12.3.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.4.14",
     "prettier": "^2.7.1",
+    "prettier-eslint": "^15.0.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "prisma": "^4.4.0",
     "prisma-erd-generator": "^1.2.1",

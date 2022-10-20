@@ -10,15 +10,6 @@ import { env } from "../../../env/server.mjs";
 import { isValidPassword } from '../../../utils/verifyData/userData';
 
 export const authOptions: NextAuthOptions = {
-  // Include user.id on session
-  callbacks: {
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-      }
-      return session;
-    },
-  },
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -27,7 +18,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "E-mail", type: "text", placeholder: "Insira seu email" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials?.password || !credentials.email) return null;
 
         if (!isValidPassword(credentials.password)) return null;
@@ -61,7 +52,10 @@ export const authOptions: NextAuthOptions = {
         }
       }),
   ],
-  secret: process.env.JWT_SECRET
+  secret: process.env.JWT_SECRET,
+  session: {
+    strategy: "jwt",
+ }
 };
 
 export default NextAuth(authOptions);

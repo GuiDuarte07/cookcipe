@@ -77,9 +77,8 @@ const Header: React.FC = () => {
               className="peer sr-only"
               onClick={() => changeTheme()}
             />
-            <div className="peer relative mx-4 h-5 w-11 rounded-full bg-gray-200 after:absolute after:top-[0px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-slate-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800" />
-            {/* {theme === 'dark' ? <HiMoon /> : <HiOutlineMoon />} */}
-            <HiMoon />
+            <div className="peer relative mf-4 mr-1 h-5 w-11 rounded-full bg-gray-200 after:absolute after:top-[0px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-slate-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800" />
+            <HiMoon className='w-5 h-5' />
           </label>
 
           {session?.user ? (

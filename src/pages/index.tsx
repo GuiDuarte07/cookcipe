@@ -23,7 +23,7 @@ const Home: NextPage<{ recipes: Recipe[] }> = ({ recipes }) => (
     </Head>
     <div className="flex h-full w-full flex-col content-center items-center dark:bg-zinc-800 ">
       <Header />
-      <div className="mt-14 min-h-full w-9/12 min-w-fit max-w-6xl">
+      <div className="mt-14 min-h-full w-9/12 max-w-6xl">
         <h2 className="my-4 text-lg font-bold">Veja algumas receitas</h2>
         <div className="flex flex-col gap-6 md:grid md:grid-cols-2 lg:grid-cols-3">
           {recipes.map((recipe) => (
@@ -69,8 +69,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       image: true
     }
   });
-
-  console.log(recipes);
 
   return {
     props: {

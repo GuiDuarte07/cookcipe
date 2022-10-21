@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { RiKnifeFill } from "react-icons/ri";
+import { GiCookingPot } from "react-icons/gi";
+import { BsFillPeopleFill } from "react-icons/bs";
 
 type Recipe = {
   image: string | null;
@@ -31,8 +34,9 @@ const RecipeCard: React.FC<Recipe> = ({
       }}
       className="flex h-full w-full cursor-pointer flex-col content-center items-center shadow-sm"
     >
-      <div className="relative h-80 w-full lg:h-60">
+      <div className="relative h-60 w-full lg:h-60">
         <Image
+          className="rounded-md"
           layout="fill"
           alt={title}
           src={
@@ -40,34 +44,30 @@ const RecipeCard: React.FC<Recipe> = ({
           }
         />
       </div>
-      <h2 className="my-2 w-full pl-2 text-left text-xl font-bold">{title}</h2>
+      <h2 className="my-2 w-full text-left text-xl font-bold">{title}</h2>
 
-      <div className="flex h-fit w-full">
-        <div className="md flex h-fit w-full gap-2">
-          <div className="flex flex-col">
-            <p className="w-full">PREP</p>
-            <p className="text-sm text-gray-600">{prepTime}m</p>
-          </div>
+      <div className="flex h-fit w-full justify-between">
+        <div className="flex items-center gap-2">
+          <p className="inline-block text-sm text-gray-600">{prepTime}m</p>
+          <RiKnifeFill/>
         </div>
 
-        <div className="flex w-full gap-2">
-          <div className="flex flex-col ">
-            <p className="w-full">BAKE</p>
-            <p className="text-sm text-gray-600">{cookTme}m</p>
-          </div>
+        <div className="flex items-center gap-2">
+          <p className="inline-block text-sm text-gray-600">{cookTme}m</p>
+          <GiCookingPot/>
         </div>
 
-        <div className="flex w-full gap-2">
-          <div className="flex flex-col">
-            <p className="text-sm text-gray-600">serves {serves}</p>
-            <p className="w-full">SERVES</p>
-          </div>
+        <div className="flex items-center gap-2">
+          <p className="inline text-sm text-gray-600">{serves}</p>
+          <BsFillPeopleFill/>
         </div>
 
-        <div className="flex w-full gap-2">
-          <div className="flex flex-col">
-            <p className="w-full">Dificuldade</p>
-            <p className="text-sm text-gray-600">{difficulty}</p>
+        <div className="flex items-center gap-2">
+          <p className="inline-block text-sm text-gray-600">Fácil</p>
+          <div className="inline-flex items-end gap-0.5 w-fit h-3">
+            <div className="h-2/6 w-1 bg-green-500"></div>
+            <div className="h-4/6 w-1 bg-slate-600"></div>
+            <div className="h-full w-1 bg-slate-600"></div>
           </div>
         </div>
       </div>

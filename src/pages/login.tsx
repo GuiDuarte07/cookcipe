@@ -32,7 +32,7 @@ const Login: NextPage = () => {
     <div className="flex h-full w-full items-center justify-start">
       <div className="flex h-full w-full flex-col items-center justify-center bg-gray-50 md:w-1/2">
         <div className="flex w-7/12 flex-col items-start justify-center md:w-5/12">
-          <h2 className="mb-4 text-2xl font-bold text-gray-900">
+          <h2 className="my-4 text-2xl font-bold text-gray-900">
             Bem-vindo novamente!
           </h2>
           <h3 className="text-sm font-medium text-gray-500">
@@ -44,7 +44,7 @@ const Login: NextPage = () => {
           onSubmit={(e) => loginWithCredentials(e)}
           className="flex h-fit w-7/12 flex-col md:w-5/12"
         >
-          <label htmlFor="email" className="mb-1 mt-10 text-sm text-gray-600">
+          <label htmlFor="email" className="mb-1 mt-6 text-sm text-gray-600">
             E-mail
           </label>
           <input
@@ -52,14 +52,14 @@ const Login: NextPage = () => {
             type="text"
             name="email"
             id="email"
-            className="h-11 w-full rounded-md border border-gray-300 pl-2 shadow-md"
+            className="h-10 w-full rounded-md border border-gray-300 pl-2 shadow-md"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <label
             htmlFor="password"
-            className="mb-1 mt-10 text-sm text-gray-600"
+            className="mb-1 mt-6 text-sm text-gray-600"
           >
             Senha
           </label>
@@ -68,28 +68,28 @@ const Login: NextPage = () => {
             type="password"
             name="password"
             id="password"
-            className="h-11 w-full rounded-md border border-gray-300 pl-2 shadow-md"
+            className="h-10 w-full rounded-md border border-gray-300 pl-2 shadow-md"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
           <button
-            className="mt-10 h-11 w-full rounded-md bg-blue-700 text-sm font-bold text-white shadow-md md:text-lg"
+            className="mt-6 h-10 w-full rounded-md bg-blue-700 text-sm font-bold text-white shadow-md md:text-base"
             type="submit"
           >
             Logar
           </button>
           <button
-            className="mt-10 flex h-11 w-full items-center justify-center rounded-md text-sm font-bold text-white shadow-md md:text-lg"
+            className="mt-6 flex h-10 w-full items-center justify-center rounded-md text-sm font-bold text-white shadow-md md:text-base"
             type="submit"
           >
             <div className="justify flex items-center">
-              <FcGoogle className="mx-4" />
+              <FcGoogle className="mx-2" />
               <p className="text-gray-700">Logar com o Google</p>
             </div>
           </button>
 
-          <p className="mt-8 text-gray-500">
+          <p className="mt-8 text-sm mx-auto text-gray-500">
             Não tem uma conta?{' '}
             <a
               className="cursor-pointer text-blue-600"

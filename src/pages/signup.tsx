@@ -14,6 +14,9 @@ const SignUp: NextPage = () => {
   const [verifyPassword, setVerifyPassword] = useState<string>('');
   const [redirect, setRedirect] = useState<boolean>(false);
 
+  const emailValidation = isValidEmail(email);
+  const passValidation = isValidPassword(password);
+
   const mutation = trpc.user.createUser.useMutation();
 
   const router = useRouter();
@@ -62,10 +65,10 @@ const SignUp: NextPage = () => {
   }, [mutation.isLoading]);
 
   return (
-    <div className="flex h-full w-full items-center justify-start">
+    <div className="flex h-full w-full min-h-screen items-center justify-start">
       <div className="flex h-full w-full flex-col items-center justify-center bg-gray-50 md:w-1/2">
         <div className="flex w-7/12 flex-col items-start justify-center md:w-5/12">
-          <h2 className="mb-4 text-2xl font-bold text-gray-900">Criar conta</h2>
+          <h2 className="my-4 text-xl font-bold text-gray-900">Criar conta</h2>
           <h3 className="text-sm font-medium text-gray-500">
             Cria sua conta para que possa usar todos os nossos serviços
           </h3>
@@ -75,7 +78,7 @@ const SignUp: NextPage = () => {
           onSubmit={(e) => createUser(e)}
           className="flex h-fit w-7/12 flex-col md:w-5/12"
         >
-          <label htmlFor="email" className="mb-1 mt-6 text-sm text-gray-600">
+          <label htmlFor="email" className="mb-1 mt-3 text-sm text-gray-600">
             E-mail
           </label>
           <input
@@ -88,11 +91,11 @@ const SignUp: NextPage = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          {!isValidEmail(email) && email && (
-            <p className="mt-2 text-sm text-red-600">Insira um e-mail válido</p>
+          {!emailValidation && email && (
+            <p className="mt-1 text-sm text-red-600">Insira um e-mail válido</p>
           )}
 
-          <label htmlFor="password" className="mb-1 mt-6 text-sm text-gray-600">
+          <label htmlFor="password" className="mb-1 mt-3 text-sm text-gray-600">
             Senha
           </label>
           <input
@@ -107,7 +110,7 @@ const SignUp: NextPage = () => {
 
           <label
             htmlFor="verifyPassword"
-            className="mb-1 mt-6 text-sm text-gray-600"
+            className="mb-1 mt-3 text-sm text-gray-600"
           >
             Verificar Senha
           </label>
@@ -121,18 +124,18 @@ const SignUp: NextPage = () => {
             onChange={(e) => setVerifyPassword(e.target.value)}
           />
 
-          {!isEqualPassword && (
-            <p className="mt-2 text-sm text-red-600">Senhas não estão iguais</p>
+          {isEqualPassword && (
+            <p className="mt-1 text-sm text-red-600">Senhas não estão iguais</p>
           )}
-          {!isValidPassword(password) && password && (
-            <p className="mt-2 text-sm text-red-600">
+          {!passValidation && password && (
+            <p className="mt-1 text-sm text-red-600">
               A senha precisa ter entre 4 e 20 digitos
             </p>
           )}
 
           <button
             disabled={mutation.isLoading || mutation.isSuccess}
-            className="mt-6 h-11 w-full rounded-md bg-blue-700 text-sm font-bold text-white shadow-md md:text-lg"
+            className="mt-3 h-10 w-full rounded-md bg-blue-700 text-sm font-bold text-white shadow-md md:text-base"
             type="submit"
           >
             Criar conta
@@ -140,16 +143,16 @@ const SignUp: NextPage = () => {
 
           <button
             disabled={mutation.isLoading || mutation.isSuccess}
-            className="mt-6 flex h-11 w-full items-center justify-center rounded-md text-sm font-bold text-white shadow-md md:text-lg"
+            className="mt-3 flex h-10 w-full items-center justify-center rounded-md text-sm font-bold text-white shadow-md md:text-base"
             type="submit"
           >
             <div className="justify flex items-center">
               <FcGoogle className="mx-4" />
-              <p className="text-gray-700">Logar com o Google</p>
+              <p className="text-gray-700 md:text-base">Logar com o Google</p>
             </div>
           </button>
 
-          <p className="mt-8 text-gray-500">
+          <p className="mt-4 text-sm mx-auto text-gray-500">
             já tem uma conta?{' '}
             <a
               className="cursor-pointer text-blue-600"

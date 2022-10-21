@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
@@ -29,7 +30,7 @@ const Login: NextPage = () => {
   };
 
   return (
-    <div className="flex h-full w-full items-center justify-start">
+    <div className="flex h-screen w-full items-center justify-start">
       <div className="flex h-full w-full flex-col items-center justify-center bg-gray-50 md:w-1/2">
         <div className="flex w-7/12 flex-col items-start justify-center md:w-5/12">
           <h2 className="my-4 text-2xl font-bold text-gray-900">
@@ -57,10 +58,7 @@ const Login: NextPage = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <label
-            htmlFor="password"
-            className="mb-1 mt-6 text-sm text-gray-600"
-          >
+          <label htmlFor="password" className="mb-1 mt-6 text-sm text-gray-600">
             Senha
           </label>
           <input
@@ -89,14 +87,11 @@ const Login: NextPage = () => {
             </div>
           </button>
 
-          <p className="mt-8 text-sm mx-auto text-gray-500">
+          <p className="mx-auto mt-8 text-sm text-gray-500">
             Não tem uma conta?{' '}
-            <a
-              className="cursor-pointer text-blue-600"
-              onClick={() => router.push('/signup')}
-            >
+            <Link className="cursor-pointer text-blue-600" href="/signup">
               Clique aqui
-            </a>
+            </Link>
           </p>
         </form>
       </div>

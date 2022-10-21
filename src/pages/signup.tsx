@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
@@ -65,7 +66,7 @@ const SignUp: NextPage = () => {
   }, [mutation.isLoading]);
 
   return (
-    <div className="flex h-full w-full min-h-screen items-center justify-start">
+    <div className="flex h-screen min-h-screen w-full items-center justify-start">
       <div className="flex h-full w-full flex-col items-center justify-center bg-gray-50 md:w-1/2">
         <div className="flex w-7/12 flex-col items-start justify-center md:w-5/12">
           <h2 className="my-4 text-xl font-bold text-gray-900">Criar conta</h2>
@@ -135,7 +136,7 @@ const SignUp: NextPage = () => {
 
           <button
             disabled={mutation.isLoading || mutation.isSuccess}
-            className="mt-3 h-10 w-full rounded-md bg-blue-700 text-sm font-bold text-white shadow-md md:text-base"
+            className="mt-6 h-10 w-full rounded-md bg-blue-700 text-sm font-bold text-white shadow-md md:text-base"
             type="submit"
           >
             Criar conta
@@ -143,7 +144,7 @@ const SignUp: NextPage = () => {
 
           <button
             disabled={mutation.isLoading || mutation.isSuccess}
-            className="mt-3 flex h-10 w-full items-center justify-center rounded-md text-sm font-bold text-white shadow-md md:text-base"
+            className="mt-4 flex h-10 w-full items-center justify-center rounded-md text-sm font-bold text-white shadow-md md:text-base"
             type="submit"
           >
             <div className="justify flex items-center">
@@ -152,14 +153,11 @@ const SignUp: NextPage = () => {
             </div>
           </button>
 
-          <p className="mt-4 text-sm mx-auto text-gray-500">
+          <p className="mx-auto mt-4 text-sm text-gray-500">
             já tem uma conta?{' '}
-            <a
-              className="cursor-pointer text-blue-600"
-              onClick={() => router.push('/login')}
-            >
+            <Link className="cursor-pointer text-blue-600" href="/login">
               Clique aqui
-            </a>
+            </Link>
           </p>
         </form>
       </div>

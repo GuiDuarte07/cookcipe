@@ -10,6 +10,8 @@ function useHandlePopup<T extends HTMLElement>(
   const [state, setState] = useState(false);
   const [visible, setVisible] = useState(false);
 
+  console.log(state, visible);
+
   function handleMultipleClicks() {
     if (visible && !state) {
       setVisible(false);
@@ -17,14 +19,14 @@ function useHandlePopup<T extends HTMLElement>(
     setState((prev) => !prev);
   }
 
-  function handleDeletion<T extends HTMLElement>(
-    element: MutableRefObject<T | null>
+  function handleDeletion<U extends HTMLElement>(
+    element: MutableRefObject<U | null>
   ) {
     const style = element?.current?.style;
     if (!style) return;
     style.animation = 'removed 0.5s forwards';
     sleep(500).then(() => {
-      if (!state) return;
+      // if (!state) return;
       setVisible(false);
     });
   }

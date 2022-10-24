@@ -1,5 +1,6 @@
 // src/pages/_app.tsx
 import '../styles/globals.css';
+import '../styles/animations.css';
 import { ThemeProvider } from 'next-themes';
 import { SessionProvider } from 'next-auth/react';
 import type { Session } from 'next-auth';

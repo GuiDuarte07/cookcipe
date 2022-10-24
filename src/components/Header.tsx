@@ -1,17 +1,24 @@
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { BsSearch } from 'react-icons/bs';
+import React, { useRef, useState } from 'react';
+import { BsSearch, BsFillPersonLinesFill } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
-import { HiMoon, HiOutlineMoon } from 'react-icons/hi';
+import { GrLogout } from 'react-icons/gr';
+import { FiEdit } from 'react-icons/fi';
+import { HiMoon } from 'react-icons/hi';
+import useHandlePopup from '../hooks/useHandlePopUp';
+import BallonPopup from './BallonPopup';
 
 const Header: React.FC = () => {
   const [search, setSearch] = useState<string>('');
   const router = useRouter();
   const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
+
+  const profileRef = useRef<HTMLButtonElement | null>(null);
+  const [profilePopup, setProfilePopup] = useHandlePopup(profileRef);
 
   const changeTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -77,14 +84,15 @@ const Header: React.FC = () => {
               className="peer sr-only"
               onClick={() => changeTheme()}
             />
-            <div className="peer relative mf-4 mr-1 h-5 w-11 rounded-full bg-gray-200 after:absolute after:top-[0px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-slate-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800" />
-            <HiMoon className='w-5 h-5' />
+            <div className="mf-4 peer relative mr-1 h-5 w-11 rounded-full bg-gray-200 after:absolute after:top-[0px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-slate-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800" />
+            <HiMoon className="h-5 w-5" />
           </label>
 
           {session?.user ? (
             <button
               type="button"
-              className="flex h-full w-fit cursor-pointer items-center gap-4"
+              className="relative flex h-full w-fit cursor-pointer items-center gap-4"
+              onClick={() => setProfilePopup()}
             >
               {session.user.image ? (
                 <Image
@@ -99,6 +107,35 @@ const Header: React.FC = () => {
               <p className="text-sm font-semibold text-gray-600 dark:text-gray-200">
                 {session.user.name ?? 'Usuário'}
               </p>
+              {profilePopup && (
+                <BallonPopup popUpSide="right" ref={profileRef}>
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-start border-b-[1px] !border-b-gray-400 py-2 pl-3 hover:bg-slate-300"
+                  >
+                    <BsFillPersonLinesFill />
+                    <p className="pl-2 text-sm text-gray-700">Ver perfil</p>
+                  </button>
+
+                  <button
+                    onClick={() => router.push('/recipes')}
+                    type="button"
+                    className="flex w-full items-center justify-start border-b-[1px] !border-b-gray-400 py-2 pl-3 hover:bg-slate-300"
+                  >
+                    <FiEdit />
+                    <p className="pl-2 text-sm text-gray-700">Gerenciar</p>
+                  </button>
+
+                  <button
+                    onClick={() => signOut()}
+                    type="button"
+                    className="flex w-full items-center justify-start py-2 pl-3 hover:bg-slate-300"
+                  >
+                    <GrLogout />
+                    <p className="pl-2 text-sm text-gray-700">Sair</p>
+                  </button>
+                </BallonPopup>
+              )}
             </button>
           ) : (
             <div className="flex h-full w-fit items-center gap-6">

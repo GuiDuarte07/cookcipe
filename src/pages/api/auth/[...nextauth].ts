@@ -1,22 +1,26 @@
 import bcrypt from 'bcrypt';
-import NextAuth, { type NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
-import CredentialsProvider from "next-auth/providers/credentials";
+import NextAuth, { type NextAuthOptions } from 'next-auth';
+import DiscordProvider from 'next-auth/providers/discord';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 // Prisma adapter for NextAuth, optional and can be removed
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "../../../server/db/client";
-import { env } from "../../../env/server.mjs";
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { prisma } from '../../../server/db/client';
+import { env } from '../../../env/server.mjs';
 import { isValidPassword } from '../../../utils/verifyData/userData';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
-        email: { label: "E-mail", type: "text", placeholder: "Insira seu email" },
-        password: { label: "Password", type: "password" }
+        email: {
+          label: 'E-mail',
+          type: 'text',
+          placeholder: 'Insira seu email'
+        },
+        password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
         if (!credentials?.password || !credentials.email) return null;
@@ -32,30 +36,33 @@ export const authOptions: NextAuthOptions = {
             email: true,
             image: true,
             name: true,
-            password_hash: true,
+            password_hash: true
           }
-        })
+        });
 
         if (!user) return null;
-        
-        const correctPass: boolean = await bcrypt.compare(credentials.password, user.password_hash as string)
 
-        if (!correctPass) return null
+        const correctPass: boolean = await bcrypt.compare(
+          credentials.password,
+          user.password_hash as string
+        );
 
-        console.log("dasd", user);
+        if (!correctPass) return null;
+
+        // console.log('================', user);
         return {
           id: user.id,
           email: user.email,
           image: user.image,
           name: user.name
         };
-        }
-      }),
+      }
+    })
   ],
   secret: process.env.JWT_SECRET,
   session: {
-    strategy: "jwt",
- }
+    strategy: 'jwt'
+  }
 };
 
 export default NextAuth(authOptions);

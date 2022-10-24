@@ -1,9 +1,10 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { RiKnifeFill } from 'react-icons/ri';
+import { RiKnifeFill, RiEditBoxFill } from 'react-icons/ri';
 import { GiCookingPot } from 'react-icons/gi';
-import { BsFillPeopleFill } from 'react-icons/bs';
+import { BsFillPeopleFill, BsFillArrowUpRightSquareFill } from 'react-icons/bs';
+import Link from 'next/link';
 
 type Recipe = {
   image: string | null;
@@ -15,7 +16,7 @@ type Recipe = {
   id: number;
 };
 
-const RecipeCard: React.FC<Recipe> = ({
+const MyRecipeCard: React.FC<Recipe> = ({
   image,
   title,
   prepTime,
@@ -27,13 +28,7 @@ const RecipeCard: React.FC<Recipe> = ({
   const router = useRouter();
 
   return (
-    <button
-      type="button"
-      onClick={() => {
-        router.push(`/recipe/${id}`);
-      }}
-      className="flex h-full w-full cursor-pointer flex-col content-center items-center shadow-sm"
-    >
+    <div className="flex h-full w-full flex-col content-center items-center shadow-sm">
       <div className="relative h-60 w-full lg:h-60">
         <Image
           className="rounded-md"
@@ -71,8 +66,22 @@ const RecipeCard: React.FC<Recipe> = ({
           </div>
         </div>
       </div>
-    </button>
+      <div className="mt-2 flex w-full">
+        <Link href={`/recipe/${id}`} className="w-fit">
+          <div className="flex cursor-pointer items-center gap-2 rounded bg-indigo-800 p-2">
+            <BsFillArrowUpRightSquareFill className="fill-white" />
+            <p className="text-sm text-white">Ir para</p>
+          </div>
+        </Link>
+        <Link href={`/recipe/create/${id}`} className="w-fit">
+          <div className="mx-2 ml-6 flex cursor-pointer items-center gap-2 rounded bg-blue-500 p-2">
+            <RiEditBoxFill className="fill-white" />
+            <p className="text-sm text-white">Editar</p>
+          </div>
+        </Link>
+      </div>
+    </div>
   );
 };
 
-export default RecipeCard;
+export default MyRecipeCard;

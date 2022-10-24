@@ -180,9 +180,3 @@ model Review {
 
   @@map("review")
 }
-
-enum Difficulty {
-  Facil
-  Medio
-  Dificil
-}

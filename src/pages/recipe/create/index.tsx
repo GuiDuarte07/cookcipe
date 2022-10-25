@@ -1,6 +1,6 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import { useState } from 'react';
+import { Reducer, useEffect, useReducer, useState } from 'react';
 import { BsFillArrowUpRightSquareFill } from 'react-icons/bs';
 import { RiEditBoxFill } from 'react-icons/ri';
 import Header from '../../../components/Header';
@@ -11,20 +11,51 @@ type Step = {
   step: number;
   text: string;
 };
+
+enum StepsEnum {
+  TEXT = 'TEXT',
+  DELETE = 'DELETE',
+  ADD = 'ADD'
+}
+
+type StepActions = {
+  type: string;
+  value?: string;
+  step?: number;
+}
+
+const stepReducer:Reducer<Step[], StepActions> = (state, {type, value, step}) => {
+  const newState = [...state];
+
+  switch(type) {
+    case StepsEnum.TEXT:
+      if (!value || !step) throw new Error("Faz o negócio direito");
+
+      const newSteps = newState[step - 1]
+
+      //console.log("antes", newSteps?.text)
+      
+      if (newSteps) {
+        newSteps.text = value;
+      }
+      //console.log("depois", newSteps?.text)
+      
+      return newState;
+    case StepsEnum.ADD:
+      newState.push({step: newState.length+1, text: ''})
+    default:
+      return newState;
+  }
+}
+
 const CreateRecipe: NextPage = () => {
-  const [steps, setSteps] = useState<Step[]>([{ step: 1, text: '' }]);
+  const [steps, stepDispatch] = useReducer(stepReducer, [{ step: 1, text: 'ds' }]);
 
   const changeSteps = (step: number, value: string) => {
-    setSteps((prev) => {
-      const newState = prev;
-
-      console.log(newState, step, value);
-
-      (newState[step - 1] as Step).text = value;
-
-      return newState;
-    });
+    stepDispatch({type: StepsEnum.TEXT, step, value});
   };
+
+  useEffect(() => {console.log("alterou")}, [steps])
 
   return (
     <>
@@ -71,6 +102,7 @@ const CreateRecipe: NextPage = () => {
                 />
               ))}
               <button
+                onClick={() => stepDispatch({type: StepsEnum.ADD})}
                 type="button"
                 className="flex cursor-pointer items-center gap-2 self-start rounded bg-orange-400 p-3 text-white"
               >
@@ -114,7 +146,7 @@ const CreateRecipe: NextPage = () => {
                 id="difficulty"
                 className="block w-20 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
               >
-                <option value={Dificulty.easy} selected>
+                <option value={Dificulty.easy} defaultValue='true'>
                   Fácil
                 </option>
                 <option value={Dificulty.medium}>Médio</option>

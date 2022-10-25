@@ -1,4 +1,6 @@
-import React from 'react';
+import { GetStaticProps } from 'next';
+import React, { useState } from 'react';
+import {prisma} from '../../server/db/client'
 
 type Props = {
   step: number;
@@ -6,11 +8,15 @@ type Props = {
   onChange: (step: number, value: string) => void;
 };
 
-const CreateStep: React.FC<Props> = ({ step, text, onChange }) => (
+const CreateStep: React.FC<Props> = ({ step, text, onChange }) => { 
+  console.log('renderizou', step, text);
+  const [hover, setHover] = useState(false);
+
+  return(
   <div className="flex items-center gap-4">
-    <p className="flex h-9 w-9 items-center justify-center rounded bg-orange-200">
-      {step}
-    </p>
+    <button type="button" onMouseEnter={() => setHover(true)} onMouseOut={() => setHover(false)}  className="flex h-9 w-9 items-center justify-center rounded bg-orange-200">
+      {hover ? 'x' : step}
+    </button>
     <input
       type="text"
       placeholder="Etapa"
@@ -19,6 +25,16 @@ const CreateStep: React.FC<Props> = ({ step, text, onChange }) => (
       onChange={(e) => onChange(step, e.target.value)}
     />
   </div>
-);
+)};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const home_applience = await prisma.home_appliance.findMany();
+
+  return {
+    props: {
+      home_applience
+    }
+  }
+}
 
 export default CreateStep;

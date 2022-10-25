@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { trpc } from '../utils/trpc';
 
 const Login: NextPage = () => {
   const [email, setEmail] = useState('');

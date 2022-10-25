@@ -1,6 +1,4 @@
-import { GetStaticProps } from 'next';
 import React, { useState } from 'react';
-import {prisma} from '../../server/db/client'
 
 type Props = {
   step: number;
@@ -26,15 +24,5 @@ const CreateStep: React.FC<Props> = ({ step, text, onChange }) => {
     />
   </div>
 )};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const home_applience = await prisma.home_appliance.findMany();
-
-  return {
-    props: {
-      home_applience
-    }
-  }
-}
 
 export default CreateStep;

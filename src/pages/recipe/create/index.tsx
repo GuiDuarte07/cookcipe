@@ -1,11 +1,13 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps, GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
-import { Reducer, useEffect, useReducer, useState } from 'react';
+import { Reducer, useReducer } from 'react';
 import { BsFillArrowUpRightSquareFill } from 'react-icons/bs';
 import { RiEditBoxFill } from 'react-icons/ri';
 import Header from '../../../components/Header';
 import CreateStep from '../../../components/recipeCreate/step';
 import Dificulty from '../../../utils/enums';
+import {prisma} from '../../../server/db/client'
+import { Home_appliance } from '@prisma/client';
 
 type Step = {
   step: number;
@@ -23,6 +25,21 @@ type StepActions = {
   value?: string;
   step?: number;
 }
+
+enum ApplianceEnum {
+  FILTER = 'FILTER',
+  DELETE = 'DELETE',
+}
+
+type ApplianceActions = {
+  type: StepsEnum;
+  index: number;
+}
+
+type Props = {
+  home_appliance: Home_appliance[]
+}
+
 
 const stepReducer:Reducer<Step[], StepActions> = (state, {type, value, step}) => {
   const newState = [...state];
@@ -48,14 +65,27 @@ const stepReducer:Reducer<Step[], StepActions> = (state, {type, value, step}) =>
   }
 }
 
-const CreateRecipe: NextPage = () => {
-  const [steps, stepDispatch] = useReducer(stepReducer, [{ step: 1, text: 'ds' }]);
+const applianceReducer:Reducer<[Home_appliance[], Home_appliance[]], ApplianceActions> = (state, {type, index}) => {
+  const newState:[Home_appliance[], Home_appliance[]] = [...state];
+
+  switch(type) {
+    default:
+      return newState;
+  }
+}
+
+const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
+  const [steps, stepDispatch] = useReducer(stepReducer, [{ step: 1, text: '' }]);
+
+  const [applianceList, applianceDispatch] = useReducer(applianceReducer,[home_appliance, home_appliance]);
 
   const changeSteps = (step: number, value: string) => {
     stepDispatch({type: StepsEnum.TEXT, step, value});
   };
 
-  useEffect(() => {console.log("alterou")}, [steps])
+  const ChangeApplianceList = (index: number) => {
+    //applianceDispatch({})
+  } 
 
   return (
     <>
@@ -188,5 +218,16 @@ const CreateRecipe: NextPage = () => {
     </>
   );
 };
+
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const home_applience = await prisma.home_appliance.findMany();
+
+  return {
+    props: {
+      home_applience
+    }
+  }
+}
 
 export default CreateRecipe;

@@ -1,91 +1,45 @@
-import type { GetServerSideProps, GetStaticProps, NextPage } from 'next';
+import type { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
-import { Reducer, useReducer } from 'react';
+import { useCallback, useReducer } from 'react';
 import { BsFillArrowUpRightSquareFill } from 'react-icons/bs';
 import { RiEditBoxFill } from 'react-icons/ri';
+import { Home_appliance } from '@prisma/client';
 import Header from '../../../components/Header';
 import CreateStep from '../../../components/recipeCreate/step';
 import Dificulty from '../../../utils/enums';
-import {prisma} from '../../../server/db/client'
-import { Home_appliance } from '@prisma/client';
+import { prisma } from '../../../server/db/client';
+import ListInput from '../../../components/ListInput';
+import { ApplianceActions, ApplianceEnum, applianceReducer } from '../../../reducers/ApplianceReducer';
+import { stepReducer, StepsEnum } from '../../../reducers/StepReducer';
 
-type Step = {
-  step: number;
-  text: string;
-};
 
-enum StepsEnum {
-  TEXT = 'TEXT',
-  DELETE = 'DELETE',
-  ADD = 'ADD'
-}
 
-type StepActions = {
-  type: string;
-  value?: string;
-  step?: number;
-}
 
-enum ApplianceEnum {
-  FILTER = 'FILTER',
-  DELETE = 'DELETE',
-}
-
-type ApplianceActions = {
-  type: StepsEnum;
-  index: number;
-}
 
 type Props = {
-  home_appliance: Home_appliance[]
-}
-
-
-const stepReducer:Reducer<Step[], StepActions> = (state, {type, value, step}) => {
-  const newState = [...state];
-
-  switch(type) {
-    case StepsEnum.TEXT:
-      if (!value || !step) throw new Error("Faz o negócio direito");
-
-      const newSteps = newState[step - 1]
-
-      //console.log("antes", newSteps?.text)
-      
-      if (newSteps) {
-        newSteps.text = value;
-      }
-      //console.log("depois", newSteps?.text)
-      
-      return newState;
-    case StepsEnum.ADD:
-      newState.push({step: newState.length+1, text: ''})
-    default:
-      return newState;
-  }
-}
-
-const applianceReducer:Reducer<[Home_appliance[], Home_appliance[]], ApplianceActions> = (state, {type, index}) => {
-  const newState:[Home_appliance[], Home_appliance[]] = [...state];
-
-  switch(type) {
-    default:
-      return newState;
-  }
-}
+  home_appliance: Home_appliance[];
+};
 
 const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
-  const [steps, stepDispatch] = useReducer(stepReducer, [{ step: 1, text: '' }]);
+  const [steps, stepDispatch] = useReducer(stepReducer, [
+    { step: 1, text: '' }
+  ]);
 
-  const [applianceList, applianceDispatch] = useReducer(applianceReducer,[home_appliance, home_appliance]);
+  const memoizedApplianceReducer = useCallback((state:[Home_appliance[], Home_appliance[]], action: ApplianceActions) => applianceReducer(state, action ), [])
+
+  const [applianceList, applianceDispatch] = useReducer(memoizedApplianceReducer, [home_appliance, []]);
 
   const changeSteps = (step: number, value: string) => {
-    stepDispatch({type: StepsEnum.TEXT, step, value});
+    stepDispatch({ type: StepsEnum.TEXT, step, value });
   };
 
-  const ChangeApplianceList = (index: number) => {
-    //applianceDispatch({})
-  } 
+  const changeSelectAppliance = (index: number) => {
+    applianceDispatch({ type: ApplianceEnum.FILTER, index })
+  };
+
+  const changeListAppliance = (index: number) => {
+    applianceDispatch({ type: ApplianceEnum.DELETE, index })
+  };
 
   return (
     <>
@@ -122,6 +76,16 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
             </div>
 
             <div className="flex flex-col gap-3">
+              <h3 className="text-lg font-bold">Utensilios necessários</h3>
+              <ListInput
+                list={applianceList[0]}
+                selectionList={applianceList[1]}
+                addInSelect={changeSelectAppliance}
+                removeFromSelect={changeListAppliance}
+              />
+            </div>
+
+            <div className="flex flex-col gap-3">
               <h3 className="text-lg font-bold">Etapas</h3>
               {steps.map(({ step, text }) => (
                 <CreateStep
@@ -132,7 +96,7 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
                 />
               ))}
               <button
-                onClick={() => stepDispatch({type: StepsEnum.ADD})}
+                onClick={() => stepDispatch({ type: StepsEnum.ADD })}
                 type="button"
                 className="flex cursor-pointer items-center gap-2 self-start rounded bg-orange-400 p-3 text-white"
               >
@@ -176,7 +140,7 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
                 id="difficulty"
                 className="block w-20 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
               >
-                <option value={Dificulty.easy} defaultValue='true'>
+                <option value={Dificulty.easy} defaultValue="true">
                   Fácil
                 </option>
                 <option value={Dificulty.medium}>Médio</option>
@@ -219,15 +183,14 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
   );
 };
 
-
 export const getStaticProps: GetStaticProps = async (context) => {
-  const home_applience = await prisma.home_appliance.findMany();
+  const home_appliance = await prisma.home_appliance.findMany();
 
   return {
     props: {
-      home_applience
+      home_appliance
     }
-  }
-}
+  };
+};
 
 export default CreateRecipe;

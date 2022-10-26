@@ -9,9 +9,7 @@ function useHandlePopup<T extends HTMLElement>(
 ): [boolean, () => void] {
   const [state, setState] = useState(false);
   const [visible, setVisible] = useState(false);
-
-  console.log(state, visible);
-
+  
   function handleMultipleClicks() {
     if (visible && !state) {
       setVisible(false);

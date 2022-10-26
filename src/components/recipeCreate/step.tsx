@@ -7,7 +7,6 @@ type Props = {
 };
 
 const CreateStep: React.FC<Props> = ({ step, text, onChange }) => { 
-  console.log('renderizou', step, text);
   const [hover, setHover] = useState(false);
 
   return(

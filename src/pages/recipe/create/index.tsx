@@ -8,13 +8,9 @@ import Header from '../../../components/Header';
 import CreateStep from '../../../components/recipeCreate/step';
 import Dificulty from '../../../utils/enums';
 import { prisma } from '../../../server/db/client';
-import ListInput from '../../../components/ListInput';
-import { ApplianceActions, ApplianceEnum, applianceReducer } from '../../../reducers/ApplianceReducer';
+import ListInput from '../../../components/recipeCreate/ListInput';
+import { ApplianceEnum, applianceReducer } from '../../../reducers/ApplianceReducer';
 import { stepReducer, StepsEnum } from '../../../reducers/StepReducer';
-
-
-
-
 
 type Props = {
   home_appliance: Home_appliance[];
@@ -25,20 +21,22 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
     { step: 1, text: '' }
   ]);
 
-  const memoizedApplianceReducer = useCallback((state:[Home_appliance[], Home_appliance[]], action: ApplianceActions) => applianceReducer(state, action ), [])
-
-  const [applianceList, applianceDispatch] = useReducer(memoizedApplianceReducer, [home_appliance, []]);
+  const [applianceList, applianceDispatch] = useReducer(applianceReducer, [home_appliance, []]);
 
   const changeSteps = (step: number, value: string) => {
     stepDispatch({ type: StepsEnum.TEXT, step, value });
   };
 
-  const changeSelectAppliance = (index: number) => {
-    applianceDispatch({ type: ApplianceEnum.FILTER, index })
+  const deleteStep = (step: number) => {
+    stepDispatch({ type: StepsEnum.DELETE, step })
+  }
+
+  const changeSelectAppliance = (id: number) => {
+    applianceDispatch({ type: ApplianceEnum.FILTER, id })
   };
 
-  const changeListAppliance = (index: number) => {
-    applianceDispatch({ type: ApplianceEnum.DELETE, index })
+  const changeListAppliance = (id: number) => {
+    applianceDispatch({ type: ApplianceEnum.DELETE, id })
   };
 
   return (
@@ -89,6 +87,7 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
               <h3 className="text-lg font-bold">Etapas</h3>
               {steps.map(({ step, text }) => (
                 <CreateStep
+                  onClick={deleteStep}
                   key={step}
                   step={step}
                   onChange={changeSteps}

@@ -35,6 +35,20 @@ state,
 			return newState;
 		case StepsEnum.ADD:
 			newState.push({ step: newState.length + 1, text: '' });
+
+			return newState;
+		case StepsEnum.DELETE:
+			if (!step) throw new Error('Faz o negócio direito');
+			
+			if (newState.length === 1) return newState;
+
+			console.log(newState.length)
+			newState.splice(step-1, 1);
+			return newState.map((stepEl, i) => {
+				stepEl.step = i+1;
+				return stepEl;
+			});
+
 		default:
 			return newState;
 }

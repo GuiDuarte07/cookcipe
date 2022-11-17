@@ -78,7 +78,7 @@ const Header: React.FC = () => {
           >
             <input
               type="checkbox"
-              {...(theme === 'dark' && { checked: true })}
+              {...(theme === 'dark' && { defaultChecked: true })}
               value=""
               id="default-toggle"
               className="peer sr-only"

@@ -79,7 +79,7 @@ model Recipe {
   description String   @db.MediumText
   prepTime    Int
   cookTime    Int
-  difficulty  String   @db.VarChar(10)
+  difficulty  Int
   serves      Int
   published   Boolean  @default(true)
   likes       Int      @default(0)

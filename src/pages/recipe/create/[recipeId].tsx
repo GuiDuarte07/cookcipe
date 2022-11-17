@@ -1,6 +1,6 @@
-import type { GetStaticProps, NextPage } from 'next';
+import type { GetServerSideProps, GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
-import { useCallback, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { BsFillArrowUpRightSquareFill } from 'react-icons/bs';
 import { RiEditBoxFill } from 'react-icons/ri';
 import { Home_appliance } from '@prisma/client';
@@ -12,16 +12,49 @@ import ListInput from '../../../components/recipeCreate/ListInput';
 import { ApplianceEnum, applianceReducer } from '../../../reducers/ApplianceReducer';
 import { stepReducer, StepsEnum } from '../../../reducers/StepReducer';
 
-type Props = {
-  home_appliance: Home_appliance[];
+export type RecipeEdit = {
+  id: number;
+  title: string;
+  cookTime: number;
+  prepTime: number;
+  likes: number;
+  difficulty: string;
+  serves: number;
+  image: string | null;
+  description: string;
 };
 
-const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
+type Props = {
+  home_appliance: Home_appliance[];
+  recipe?: RecipeEdit
+};
+
+const CreateRecipe: NextPage<Props> = ({ home_appliance, recipe }) => {
   const [steps, stepDispatch] = useReducer(stepReducer, [
     { step: 1, text: '' }
   ]);
 
   const [applianceList, applianceDispatch] = useReducer(applianceReducer, [home_appliance, []]);
+
+  const titleController = useRef<HTMLInputElement>(null);
+  const descriptionController = useRef<HTMLTextAreaElement>(null);
+  const prepTimeController = useRef<HTMLInputElement>(null);
+  const cookTimeController = useRef<HTMLInputElement>(null);
+  const difficultyController = useRef<HTMLSelectElement>(null);
+  const servesController = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+
+    if (!recipe) return;
+
+    (titleController.current as HTMLInputElement).value = recipe.title;
+    (descriptionController.current as HTMLTextAreaElement).value = recipe.description;
+    (prepTimeController.current as HTMLInputElement).value = recipe.prepTime.toString();
+    (cookTimeController.current as HTMLInputElement).value = recipe.cookTime.toString();
+    (difficultyController.current as HTMLSelectElement).value = "Fácil";
+    (servesController.current as HTMLInputElement).value = recipe.serves.toString();
+
+  },[titleController.current])
 
   const changeSteps = (step: number, value: string) => {
     stepDispatch({ type: StepsEnum.TEXT, step, value });
@@ -39,37 +72,41 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
     applianceDispatch({ type: ApplianceEnum.DELETE, id })
   };
 
+  console.log(recipe)
+
   return (
     <>
       <Head>
         <title>Criar receita</title>
         <meta name="description" />
       </Head>
-      <div className="flex h-full w-full flex-col content-center items-center dark:bg-zinc-800 ">
+      <div className="flex h-full w-full flex-col content-center items-center dark:bg-zinc-800 dark:font-black">
         <Header />
 
         <div className="mt-14 min-h-full w-9/12 max-w-6xl">
           <h2 className="my-4 text-lg font-bold">Criar nova receita</h2>
 
-          <form className="my-4 flex flex-col gap-4 rounded-lg bg-slate-50 px-2 py-4 shadow-xl">
+          <form className="my-4 flex flex-col gap-4 rounded-lg bg-slate-50 px-2 py-4 shadow-xl dark:bg-gray-700">
             <div className="flex flex-col gap-3">
               <label htmlFor="titulo" className="text-lg font-bold">
                 Título da receita
               </label>
               <input
+                ref={titleController}
                 type="text"
                 name="titulo"
                 id="titulo"
                 placeholder="Título da receita"
-                className="h-9 rounded text-gray-700 outline-none"
+                className="h-9 rounded text-gray-700 outline-none pl-1 dark:text-gray-200"
               />
             </div>
 
             <div className="flex flex-col gap-3">
               <h3 className="text-lg font-bold">Descrição da receita</h3>
               <textarea
+                ref={descriptionController}
                 name=""
-                className="min-h-[100px] rounded text-gray-700 outline-none"
+                className="min-h-[100px] rounded text-gray-700 outline-none dark:text-gray-200"
               />
             </div>
 
@@ -97,7 +134,7 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
               <button
                 onClick={() => stepDispatch({ type: StepsEnum.ADD })}
                 type="button"
-                className="flex cursor-pointer items-center gap-2 self-start rounded bg-orange-400 p-3 text-white"
+                className="flex cursor-pointer items-center gap-2 self-start rounded bg-orange-400 dark:bg-orange-500 p-3 text-white"
               >
                 Adicionar nova etapa
               </button>
@@ -108,34 +145,38 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
                 Tempo de preparo
               </label>
               <input
+                ref={prepTimeController}
                 type="number"
                 min="0"
                 name="preparo"
                 id="preparo"
-                className="h-6 w-12 rounded bg-slate-200 text-gray-700 outline-none"
+                className="pl-1 h-6 w-12 rounded bg-slate-200 dark:bg-gray-500 text-gray-700 dark:text-gray-200 outline-none"
               />
               minutos
               <label htmlFor="cozimento" className="">
                 Tempo de cozimento
               </label>
               <input
+                ref={cookTimeController}
                 type="number"
                 min="0"
                 name="cozimento"
                 id="cozimento"
-                className="h-6 w-12 rounded bg-slate-200 text-gray-700 outline-none"
+                className="pl-1 h-6 w-12 rounded dark:bg-gray-500 bg-slate-200 text-gray-700 outline-none dark:text-gray-200"
               />
               minutos
             </div>
 
             <div className="flex flex-col gap-3">
               <label
+                
                 htmlFor="difficulty"
                 className="block font-bold text-gray-900 dark:text-gray-400"
               >
                 Selecione a dificuldade
               </label>
               <select
+                ref={difficultyController}
                 id="difficulty"
                 className="block w-20 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
               >
@@ -152,11 +193,12 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
                 Serve
               </label>
               <input
+                ref={servesController}
                 type="number"
                 min="0"
                 name="serve"
                 id="serve"
-                className="h-6 w-12 rounded bg-slate-200 text-gray-700 outline-none"
+                className="pl-1 dark:bg-gray-500 h-6 w-12 rounded bg-slate-200 text-gray-700 outline-none dark:text-gray-200"
               />
               pessoas
             </div>
@@ -182,14 +224,61 @@ const CreateRecipe: NextPage<Props> = ({ home_appliance }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+
+  await prisma.step.deleteMany()
+
+  const recipeId = context.params?.recipeId;
+
+  console.log("recipeId:", recipeId)
+
+  const redirect = {
+    redirect: {
+      permanent: false,
+      destination: "/404",
+    }
+  };
+
+  if (typeof recipeId !== "string") return redirect;
+
+  if (!parseInt(recipeId)) return redirect;
+    
+
   const home_appliance = await prisma.home_appliance.findMany();
+
+  if (recipeId === "new") {
+    return {
+      props: {
+        home_appliance
+      }
+    };
+  }
+
+  const recipe = await prisma.recipe.findUnique({
+    where: {
+      id: parseInt(recipeId)
+    },
+    select: {
+      id: true,
+      title: true,
+      cookTime: true,
+      prepTime: true,
+      likes: true,
+      difficulty: true,
+      serves: true,
+      image: true,
+      description: true,
+    }
+  })
+  
+  if (!recipe) return redirect;
 
   return {
     props: {
-      home_appliance
+      home_appliance,
+      recipe
     }
-  };
+  }
 };
 
 export default CreateRecipe;

@@ -17,7 +17,7 @@ const ListInput: React.FC<Props> = ({ list, selectionList, addInSelect, removeFr
   const [topListWidth, setTopListWidth] = useState<number>(0);
   const [showList, setShowList] = useState<boolean>(false);
   const [inputText, setInputText] = useState("");
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const filteredList = list.filter((text) => text.name.toLowerCase().includes(inputText.toLowerCase()));
 

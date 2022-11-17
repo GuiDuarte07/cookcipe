@@ -43,9 +43,9 @@ state,
 			if (newState.length === 1) return newState;
 
 			console.log(newState.length)
-			newState.splice(step-1, 1);
+			newState.splice(step - 1, 1);
 			return newState.map((stepEl, i) => {
-				stepEl.step = i+1;
+				stepEl.step = i + 1;
 				return stepEl;
 			});
 

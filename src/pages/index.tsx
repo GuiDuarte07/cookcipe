@@ -5,7 +5,7 @@ import { prisma } from '../server/db/client';
 import RecipeCard from '../components/RecipeCard';
 import Header from '../components/Header';
 
-type Recipe = {
+export type RecipeHomeList = {
   id: number;
   title: string;
   cookTime: number;
@@ -15,7 +15,7 @@ type Recipe = {
   serves: number;
   image: string | null;
 };
-const Home: NextPage<{ recipes: Recipe[] }> = ({ recipes }) => (
+const Home: NextPage<{ recipes: RecipeHomeList[] }> = ({ recipes }) => (
   <>
     <Head>
       <title>Cookcipe</title>
@@ -52,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const skipCount = parseInt(page as string, 10) * 0;
 
-  const recipes: Recipe[] = await prisma.recipe.findMany({
+  const recipes: RecipeHomeList[] = await prisma.recipe.findMany({
     where: {
       published: true
     },

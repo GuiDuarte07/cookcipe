@@ -65,6 +65,7 @@ model User {
   sessions      Session[]
 
   recipes          Recipe[]
+  ingredients      Ingredient[]
   favorite_recipes Favorite_repices[]
   like_recipes     Likes_recipes[]
   Review           Review[]
@@ -100,22 +101,24 @@ model Recipe {
   @@map("recipes")
 }
 
-// model Ingredient {
-//  id   String @id @default(uuid())
-//  name String @db.TinyText
-//  unit String @db.VarChar(20)
-//
-//  ingredient_name Ingredient_text[]
-//
-//  @@map("ingredients")
-//}
+ model Ingredient {
+  id   String @id @default(uuid())
+  name String @db.VarChar(100)
+
+  ingredient_name Ingredient_text[]
+  author     User    @relation(fields: [authorId], references: [id])
+  authorId   String
+  
+
+  @@map("ingredients")
+}
 
 model Ingredient_text {
   id   String @id @default(uuid())
   text String @db.VarChar(500)
 
-  // ingredientId    String
-  // ingredient_name Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId    String
+  ingredient_name Ingredient @relation(fields: [ingredientId], references: [id])
   recipeId Int
   recipe   Recipe @relation(fields: [recipeId], references: [id])
 

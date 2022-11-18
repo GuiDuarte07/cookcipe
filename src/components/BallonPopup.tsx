@@ -34,7 +34,7 @@ const BallonPopup = (
         top: `${parentHeight ? parentHeight + 10 : 10}px`,
         ...(popUpSide === 'left' ? { left: '0px' } : { right: '0px' })
       }}
-      className="popoupanimation absolute z-10 h-0 w-40 rounded-md bg-slate-200 py-2 shadow-lg"
+      className="popoupanimation absolute z-10 h-fit w-40 rounded-md bg-slate-200 py-2 shadow-lg"
     >
       <div
         style={{ ...{ [popUpSide]: '5px' } }}

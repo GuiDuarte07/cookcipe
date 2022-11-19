@@ -1,5 +1,6 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+import { env } from 'process';
 import { trpc } from '../utils/trpc';
 import { prisma } from '../server/db/client';
 import RecipeCard from '../components/RecipeCard';
@@ -12,7 +13,7 @@ export type RecipeHomeList = {
   cookTime: number;
   prepTime: number;
   likes: number;
-  difficulty: string;
+  difficulty: number;
   serves: number;
   image: string | null;
 };
@@ -27,7 +28,7 @@ const Home: NextPage<{ recipes: RecipeHomeList[] }> = ({ recipes }) => (
       <div className="mt-14 min-h-full w-9/12 max-w-6xl">
         <h2 className="my-4 text-lg font-bold">Veja algumas receitas</h2>
         <div className="flex flex-col gap-6 md:grid md:grid-cols-2 lg:grid-cols-3">
-          {recipes.map((recipe) => (
+          {recipes?.map((recipe) => (
             <RecipeCard
               cookTme={recipe.cookTime}
               prepTime={recipe.prepTime}
@@ -46,10 +47,14 @@ const Home: NextPage<{ recipes: RecipeHomeList[] }> = ({ recipes }) => (
 );
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  let page = context?.params?.index;
+  let page = context?.params?.index as string | undefined;
 
-  if (!page) page = '0';
-  if (typeof page !== 'string') [page] = page;
+  if (!page) page = '#';
+
+  if (page === 'test' && env.NODE_ENV === 'development')
+    return {
+      props: {}
+    };
 
   const skipCount = parseInt(page as string, 10) * 0;
 

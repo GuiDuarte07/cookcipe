@@ -10,7 +10,7 @@ type Recipe = {
   title: string;
   prepTime: number;
   cookTme: number;
-  difficulty: string;
+  difficulty: number;
   serves: number;
   id: number;
 };

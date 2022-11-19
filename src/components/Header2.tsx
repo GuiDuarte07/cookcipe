@@ -32,20 +32,13 @@ const Header2: React.FC = () => {
   };
 
   return (
-    <nav className="flex w-full justify-center border-gray-200 bg-white dark:bg-gray-900">
-      <div className="flex h-full w-9/12 min-w-fit max-w-6xl px-2 py-2.5 sm:px-4">
-        <div className="container mx-auto flex flex-wrap items-center justify-between">
+    <nav className="flex w-full justify-center border-gray-400 bg-gray-100 dark:bg-gray-900">
+      <div className="flex h-full w-9/12 min-w-fit max-w-6xl px-2 py-1 sm:px-4">
+        <div className="container mx-auto flex  items-center justify-between">
           <Link href="/sd" className="flex items-center">
             <div className="">
-              <Image
-                height={24}
-                width={24}
-                src="/public/favicon.ico"
-                className="mr-3 h-6 sm:h-9"
-                alt="Flowbite Logo"
-              />
               <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-                Flowbite
+                Cookcipe :D
               </span>
             </div>
           </Link>
@@ -65,58 +58,33 @@ const Header2: React.FC = () => {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                clip-rule="evenodd"
+                clipRule="evenodd"
               />
             </svg>
           </button>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-            <ul className="mt-4 flex flex-col rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-white md:text-sm md:font-medium md:dark:bg-gray-900">
-              <li>
-                <Link
-                  href="/"
-                  className="block rounded bg-blue-700 py-2 pl-3 pr-4 text-white dark:text-white md:bg-transparent md:p-0 md:text-blue-700"
-                  aria-current="page"
-                >
+            <ul className="mt-4 flex flex-col rounded-lg border bg-inherit  bg-gray-50 p-4  md:mt-0 md:flex-row md:space-x-8 md:border-0  md:text-sm md:font-medium ">
+              <li className="block border-b-2 py-2 pl-3 pr-4 text-black dark:text-white md:bg-transparent md:p-0">
+                <Link href="/" aria-current="page">
                   Home
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/"
-                  className="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white"
-                >
-                  About
-                </Link>
+              <li className="block border-b-2 py-2 pl-3 pr-4 text-black dark:text-white md:bg-transparent md:p-0">
+                <Link href="/">About</Link>
               </li>
-              <li>
-                <Link
-                  href="/"
-                  className="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white"
-                >
-                  Services
-                </Link>
+              <li className="block border-b-2 py-2 pl-3 pr-4 text-black dark:text-white md:bg-transparent md:p-0">
+                <Link href="/">Services</Link>
               </li>
-              <li>
-                <Link
-                  href="/"
-                  className="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white"
-                >
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/"
-                  className="block rounded py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent md:dark:hover:text-white"
-                >
-                  Contact
-                </Link>
+              <li className="block border-b-2 py-2 pl-3 pr-4 text-black dark:text-white md:bg-transparent md:p-0">
+                <Link href="/">Pricing</Link>
               </li>
             </ul>
           </div>
-          <div className="w-4/12">
+
+          {/* Search-bar ----------------- */}
+          <div className="w-5/12">
             <form>
               <label
                 htmlFor="default-search"
@@ -124,7 +92,7 @@ const Header2: React.FC = () => {
               >
                 Search
               </label>
-              <div className="relative">
+              <div className="relative flex items-center">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                   <svg
                     aria-hidden="true"
@@ -135,9 +103,9 @@ const Header2: React.FC = () => {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                     />
                   </svg>
@@ -145,13 +113,13 @@ const Header2: React.FC = () => {
                 <input
                   type="search"
                   id="default-search"
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 pl-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  className="block w-9/12 rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   placeholder="Search Mockups, Logos..."
                   required
                 />
                 <button
                   type="submit"
-                  className="absolute right-2.5 bottom-2.5 rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="ml-2 rounded-lg bg-blue-700 px-3 py-3 text-sm font-medium text-white transition hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Search
                 </button>
@@ -159,6 +127,43 @@ const Header2: React.FC = () => {
             </form>
           </div>
         </div>
+
+        {/* Theme toggle */}
+        <label
+          htmlFor="default-toggle"
+          className="relative ml-4 mr-2 inline-flex cursor-pointer items-center"
+        >
+          <input
+            type="checkbox"
+            {...(theme === 'dark' && { defaultChecked: true })}
+            value=""
+            id="default-toggle"
+            className="peer sr-only"
+            onClick={() => changeTheme()}
+          />
+          <div className="mf-4 peer relative mr-1 h-5 w-11 rounded-full bg-gray-200 after:absolute after:top-[0px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-slate-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800" />
+          <HiMoon className="h-5 w-5" />
+        </label>
+
+        {/* login/register or profile image */}
+        {session?.user ? (
+          <div className="my-5 flex w-fit rounded-xl border shadow-sm">
+            <button
+              type="button"
+              className="m-0 rounded-l-xl bg-blue-600 px-3 py-2 text-sm text-white transition hover:bg-blue-800 focus:ring-blue-800 "
+            >
+              <Link href="/login">Entrar</Link>
+            </button>
+            <button
+              type="button"
+              className="rounded-r-xl bg-neutral-50 px-3 py-2 text-sm text-black transition hover:bg-neutral-100 dark:bg-slate-300"
+            >
+              <Link href="/signup">Registrar</Link>
+            </button>
+          </div>
+        ) : (
+          <p>logged-in</p>
+        )}
       </div>
     </nav>
   );

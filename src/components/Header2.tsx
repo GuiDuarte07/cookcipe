@@ -18,8 +18,8 @@ const Header2: React.FC = () => {
   const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
 
-  const profileRef = useRef<HTMLButtonElement | null>(null);
-  const [profilePopup, setProfilePopup] = useHandlePopup(profileRef);
+  const profileRef = useRef<HTMLDivElement>(null);
+  const [profilePopup, setProfilePopup] = useState(false);
 
   const changeTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -33,7 +33,7 @@ const Header2: React.FC = () => {
 
   return (
     <nav className="flex w-full justify-center border-gray-400 bg-gray-100 dark:bg-gray-900">
-      <div className="flex h-full w-9/12 min-w-fit max-w-6xl px-2 py-1 sm:px-4">
+      <div className="flex h-full w-9/12 min-w-fit max-w-6xl items-center px-2 py-1 sm:px-6">
         <div className="container mx-auto flex  items-center justify-between">
           <Link href="/sd" className="flex items-center">
             <div className="">
@@ -65,7 +65,7 @@ const Header2: React.FC = () => {
             </svg>
           </button>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-            <ul className="mt-4 flex flex-col rounded-lg border bg-inherit  bg-gray-50 p-4  md:mt-0 md:flex-row md:space-x-8 md:border-0  md:text-sm md:font-medium ">
+            <ul className="mt-4 flex flex-col rounded-lg border bg-inherit   p-4  md:mt-0 md:flex-row md:space-x-8 md:border-0  md:text-sm md:font-medium ">
               <li className="block border-b-2 py-2 pl-3 pr-4 text-black dark:text-white md:bg-transparent md:p-0">
                 <Link href="/" aria-current="page">
                   Home
@@ -93,7 +93,7 @@ const Header2: React.FC = () => {
                 Search
               </label>
               <div className="relative flex items-center">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center pl-3">
                   <svg
                     aria-hidden="true"
                     className="h-5 w-5 text-gray-500 dark:text-gray-400"
@@ -147,6 +147,54 @@ const Header2: React.FC = () => {
 
         {/* login/register or profile image */}
         {session?.user ? (
+          <div
+            ref={profileRef}
+            type="button"
+            className="relative flex h-7 w-8 cursor-pointer items-center justify-center"
+            onClick={() => setProfilePopup((prev) => !prev)}
+          >
+            <Image
+              layout="fill"
+              alt="imagem de perfil"
+              src="/profileIcon.png"
+            />
+            {profilePopup && (
+              <BallonPopup popUpSide="right" ref={profileRef}>
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-start border-b-[1px] !border-b-gray-400 px-6 py-2 pl-3 hover:bg-slate-300"
+                >
+                  <BsFillPersonLinesFill />
+                  <p className="pl-2 text-sm text-gray-700 dark:text-white">
+                    Ver perfil
+                  </p>
+                </button>
+
+                <button
+                  onClick={() => router.push('/recipes')}
+                  type="button"
+                  className="flex w-full items-center justify-start border-b-[1px] !border-b-gray-400 px-6 py-2 pl-3 hover:bg-slate-300"
+                >
+                  <FiEdit />
+                  <p className="pl-2 text-sm text-gray-700 dark:text-white">
+                    Gerenciar
+                  </p>
+                </button>
+
+                <button
+                  onClick={() => signOut()}
+                  type="button"
+                  className="flex w-full items-center justify-start px-6 py-2 pl-3 hover:bg-slate-300"
+                >
+                  <GrLogout />
+                  <p className="pl-2 text-sm text-gray-700 dark:text-white">
+                    Sair
+                  </p>
+                </button>
+              </BallonPopup>
+            )}
+          </div>
+        ) : (
           <div className="my-5 flex w-fit rounded-xl border shadow-sm">
             <button
               type="button"
@@ -161,8 +209,6 @@ const Header2: React.FC = () => {
               <Link href="/signup">Registrar</Link>
             </button>
           </div>
-        ) : (
-          <p>logged-in</p>
         )}
       </div>
     </nav>

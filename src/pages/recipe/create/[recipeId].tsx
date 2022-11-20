@@ -1,6 +1,6 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect, useReducer, useRef } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import { BsFillArrowUpRightSquareFill } from 'react-icons/bs';
 import { RiEditBoxFill } from 'react-icons/ri';
 import { Home_appliance as HomeApplicance } from '@prisma/client';
@@ -14,6 +14,7 @@ import {
   applianceReducer
 } from '../../../reducers/ApplianceReducer';
 import { stepReducer, StepsEnum } from '../../../reducers/StepReducer';
+import Header2 from '../../../components/Header2';
 
 export type RecipeEdit = {
   id: number;
@@ -41,6 +42,10 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
     homeAppliance,
     []
   ]);
+
+  const [ingredients, setIngredients] = useState<
+    { ingredient: string; ingredientText: string }[]
+  >([{ ingredient: 'test', ingredientText: 'test texto' }]);
 
   const titleController = useRef<HTMLInputElement>(null);
   const descriptionController = useRef<HTMLTextAreaElement>(null);
@@ -87,7 +92,7 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
         <meta name="description" />
       </Head>
       <div className="flex h-full w-full flex-col content-center items-center dark:bg-zinc-800">
-        <Header />
+        <Header2 />
 
         <div className="mt-14 min-h-full w-9/12 max-w-6xl">
           <h2 className="my-4 text-lg font-bold">Criar nova receita</h2>
@@ -148,6 +153,36 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
 
             <div className="flex flex-col gap-3">
               <h3 className="text-lg font-bold">Ingredientes</h3>
+              {ingredients.map((data) => (
+                <div key={data.ingredient} className="my-2 flex">
+                  <p className="mr-8">{data.ingredient}</p>
+                  <p className="">{data.ingredientText}</p>
+                </div>
+              ))}
+              <div className="flex w-full gap-8">
+                <label htmlFor="ingredient" className="relative pt-[10px]">
+                  <span className="absolute top-[-10px] ">Ingrediente</span>
+                  <input
+                    type="text"
+                    name=""
+                    id="ingredient"
+                    className="h-7 rounded pl-1 outline-none"
+                  />
+                </label>
+
+                <label
+                  htmlFor="ingredient"
+                  className="relative flex-grow pt-[10px]"
+                >
+                  <span className="absolute top-[-10px] ">Ingrediente</span>
+                  <input
+                    type="text"
+                    name=""
+                    id="ingredient"
+                    className="h-7 w-8/12 rounded pl-1 outline-none"
+                  />
+                </label>
+              </div>
               <button
                 type="button"
                 className="flex cursor-pointer items-center gap-2 self-start rounded bg-purple-800 p-3 text-white dark:bg-purple-700"

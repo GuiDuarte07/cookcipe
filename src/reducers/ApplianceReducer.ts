@@ -1,5 +1,5 @@
 import { Reducer } from 'react';
-import { Home_appliance } from '@prisma/client';
+import { Home_appliance as HomeAppliance } from '@prisma/client';
 
 export enum ApplianceEnum {
   FILTER = 'FILTER',
@@ -12,13 +12,11 @@ export type ApplianceActions = {
 };
 
 export const applianceReducer: Reducer<
-  [Home_appliance[], Home_appliance[]],
+  [HomeAppliance[], HomeAppliance[]],
   ApplianceActions
 > = (state, { type, id }) => {
-  const newState: [Home_appliance[], Home_appliance[]] = structuredClone(state);
+  const newState: [HomeAppliance[], HomeAppliance[]] = structuredClone(state);
   const index = newState[0].findIndex((el) => el.id === id);
-
-  console.log(type, id);
 
   switch (type) {
     case ApplianceEnum.FILTER:

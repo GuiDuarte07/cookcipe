@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import RecipeCard from '../../components/RecipeCard';
 import { prisma } from '../../server/db/client';
 import MyRecipeCard from '../../components/MyRecipeCard';
+import Header2 from '../../components/Header2';
 
 type Recipe = {
   id: number;
@@ -24,7 +25,7 @@ const MyRecipeList: NextPage<{ recipes: Recipe[] }> = ({ recipes }) => (
       <meta name="description" />
     </Head>
     <div className="flex h-full w-full flex-col content-center items-center dark:bg-zinc-800 ">
-      <Header />
+      <Header2 />
       <div className="mt-14 min-h-full w-9/12 max-w-6xl">
         <h2 className="my-4 text-lg font-bold">Minhas receitas</h2>
         <div className="flex flex-col gap-6 md:grid md:grid-cols-2 lg:grid-cols-3">

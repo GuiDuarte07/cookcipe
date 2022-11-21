@@ -2,7 +2,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { BsFillArrowUpRightSquareFill } from 'react-icons/bs';
-import { RiEditBoxFill } from 'react-icons/ri';
+import { RiEditBoxFill, RiDeleteBack2Fill } from 'react-icons/ri';
 import { Home_appliance as HomeApplicance } from '@prisma/client';
 import Header from '../../../components/Header';
 import CreateStep from '../../../components/recipeCreate/step';
@@ -33,6 +33,16 @@ type Props = {
   recipe?: RecipeEdit;
 };
 
+const ingredientsTemp = [
+  {
+    id: 1,
+    ingredient: 'Açuçar',
+    ingredientText: '2 colheres de sopa de açucar'
+  },
+  { id: 2, ingredient: 'Arroz', ingredientText: '1kg de arroz branco' },
+  { id: 3, ingredient: 'Pão', ingredientText: '2 pães francês' }
+];
+
 const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
   const [steps, stepDispatch] = useReducer(stepReducer, [
     { step: 1, text: '' }
@@ -43,9 +53,10 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
     []
   ]);
 
-  const [ingredients, setIngredients] = useState<
-    { ingredient: string; ingredientText: string }[]
-  >([{ ingredient: 'test', ingredientText: 'test texto' }]);
+  const [ingredients, setIngredients] =
+    useState<{ id: number; ingredient: string; ingredientText: string }[]>(
+      ingredientsTemp
+    );
 
   const titleController = useRef<HTMLInputElement>(null);
   const descriptionController = useRef<HTMLTextAreaElement>(null);
@@ -53,6 +64,9 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
   const cookTimeController = useRef<HTMLInputElement>(null);
   const difficultyController = useRef<HTMLSelectElement>(null);
   const servesController = useRef<HTMLInputElement>(null);
+
+  const [ingredientName, setIngredientName] = useState<string>('');
+  const [ingredientTextName, setIngredientTextName] = useState<string>('');
 
   useEffect(() => {
     if (!recipe) return;
@@ -83,6 +97,19 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
 
   const changeListAppliance = (id: number) => {
     applianceDispatch({ type: ApplianceEnum.DELETE, id });
+  };
+
+  const addIngredient = () => {
+    if (!ingredientName || !ingredientTextName) return;
+
+    setIngredients((prev) => [
+      ...prev,
+      {
+        ingredient: ingredientName,
+        ingredientText: ingredientTextName,
+        id: prev.length + Math.round(Math.random() * 100)
+      }
+    ]);
   };
 
   return (
@@ -151,22 +178,52 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
               </button>
             </div>
 
-            <div className="flex flex-col gap-3">
+            {/* Ingredient list field */}
+            <div className="my-2 flex flex-col gap-3">
               <h3 className="text-lg font-bold">Ingredientes</h3>
               {ingredients.map((data) => (
-                <div key={data.ingredient} className="my-2 flex">
-                  <p className="mr-8">{data.ingredient}</p>
-                  <p className="">{data.ingredientText}</p>
+                <div
+                  key={data.id}
+                  className="flex cursor-pointer items-center rounded-md border-b-2 border-solid border-gray-400 bg-gray-200 px-2 py-2 hover:mr-1 hover:-ml-1 hover:border-gray-300 dark:bg-gray-800"
+                >
+                  <p className="mr-8 min-w-[90px] max-w-[90px] overflow-hidden overflow-ellipsis whitespace-nowrap border-r-2 border-solid border-gray-400 text-sm dark:text-gray-100">
+                    {data.ingredient}
+                  </p>
+                  <p className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap dark:text-gray-100">
+                    {data.ingredientText}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const position = ingredients.findIndex(
+                        (ingredient) => ingredient.id === data.id
+                      );
+
+                      setIngredients((prev) => {
+                        const state = structuredClone(prev);
+
+                        state.splice(position, 1);
+                        return state;
+                      });
+                    }}
+                  >
+                    <RiDeleteBack2Fill className="hover:scale-110 hover:fill-red-600" />
+                  </button>
                 </div>
               ))}
-              <div className="flex w-full gap-8">
+
+              {/* Ingredient input field */}
+              <div className="mt-7 flex w-full gap-8">
                 <label htmlFor="ingredient" className="relative pt-[10px]">
                   <span className="absolute top-[-10px] ">Ingrediente</span>
                   <input
                     type="text"
                     name=""
                     id="ingredient"
-                    className="h-7 rounded pl-1 outline-none"
+                    className="h-7 w-10/12 rounded pl-1 outline-none"
+                    value={ingredientName}
+                    onChange={(e) => setIngredientName(e.target.value)}
                   />
                 </label>
 
@@ -174,18 +231,21 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
                   htmlFor="ingredient"
                   className="relative flex-grow pt-[10px]"
                 >
-                  <span className="absolute top-[-10px] ">Ingrediente</span>
+                  <span className="absolute top-[-10px] ">Descrição</span>
                   <input
                     type="text"
                     name=""
                     id="ingredient"
-                    className="h-7 w-8/12 rounded pl-1 outline-none"
+                    className="h-7 w-full rounded pl-1 outline-none"
+                    value={ingredientTextName}
+                    onChange={(e) => setIngredientTextName(e.target.value)}
                   />
                 </label>
               </div>
               <button
                 type="button"
                 className="flex cursor-pointer items-center gap-2 self-start rounded bg-purple-800 p-3 text-white dark:bg-purple-700"
+                onClick={() => addIngredient()}
               >
                 Adicionar ingrediente
               </button>
@@ -260,7 +320,7 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
                   <p className="text-sm text-white">Publicar</p>
                 </div>
               </button>
-              <button type="submit" className="w-fit">
+              <button type="submit" disabled className=" w-fit">
                 <div className="mx-2 ml-6 flex cursor-pointer items-center gap-2 rounded bg-blue-500 p-2">
                   <RiEditBoxFill className="fill-white" />
                   <p className="text-sm text-white">Salvar</p>

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { TiDelete } from 'react-icons/ti';
 
 type Props = {
   step: number;
@@ -17,9 +18,9 @@ const CreateStep: React.FC<Props> = ({ step, text, onChange, onClick }) => {
         onMouseEnter={() => setHover(true)}
         onMouseOut={() => setHover(false)}
         onClick={() => onClick(step)}
-        className="flex h-9 w-9 items-center justify-center rounded bg-orange-200 dark:bg-orange-500"
+        className="flex h-9 w-9 items-center justify-center rounded border-2 border-solid border-black bg-orange-400 dark:border-white dark:bg-orange-500"
       >
-        {hover ? 'x' : step}
+        {hover ? <TiDelete className="pointer-events-none" /> : step}
       </button>
       <input
         type="text"

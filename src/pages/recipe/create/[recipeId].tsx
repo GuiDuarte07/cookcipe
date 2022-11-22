@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { BsFillArrowUpRightSquareFill } from 'react-icons/bs';
 import { RiEditBoxFill, RiDeleteBack2Fill } from 'react-icons/ri';
-import { Home_appliance as HomeApplicance } from '@prisma/client';
+import { Home_appliance as HomeAppliance } from '@prisma/client';
 import Header from '../../../components/Header';
 import CreateStep from '../../../components/recipeCreate/step';
 import Dificulty from '../../../utils/enums';
@@ -29,7 +29,7 @@ export type RecipeEdit = {
 };
 
 type Props = {
-  homeAppliance: HomeApplicance[];
+  homeAppliance: HomeAppliance[];
   recipe?: RecipeEdit;
 };
 
@@ -285,7 +285,7 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
               >
                 Selecione a dificuldade
               </label>
-              <select
+              {/* <select
                 ref={difficultyController}
                 id="difficulty"
                 className="block w-20 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
@@ -295,7 +295,44 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
                 </option>
                 <option value={Dificulty.medium}>Médio</option>
                 <option value={Dificulty.hard}>Difícil</option>
-              </select>
+              </select> */}
+
+              <button
+                id="dropdownDefault"
+                data-dropdown-toggle="dropdown"
+                className="inline-flex w-44 items-center rounded-lg bg-blue-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button"
+              >
+                Dropdown button{' '}
+                <svg
+                  className="ml-2 h-4 w-4"
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              <div
+                id="dropdown"
+                className="z-10 hidden w-44 divide-y divide-gray-100 rounded bg-white shadow dark:bg-gray-700"
+              >
+                <ul
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownDefault"
+                >
+                  <li>Fácil</li>
+                  <li>Médio</li>
+                  <li>Difícil</li>
+                </ul>
+              </div>
             </div>
 
             <div className="flex items-center gap-3">
@@ -348,7 +385,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (!parseInt(recipeId, 10) && recipeId !== 'new') return redirect;
 
-  const homeAppliance = await prisma.home_appliance.findMany();
+  /* const homeAppliance =  */
+  let homeAppliance: HomeAppliance[];
+  try {
+    homeAppliance = await prisma.home_appliance.findMany();
+  } catch {
+    homeAppliance = [];
+  }
 
   if (recipeId === 'new') {
     return {

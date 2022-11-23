@@ -15,6 +15,7 @@ import {
 } from '../../../reducers/ApplianceReducer';
 import { stepReducer, StepsEnum } from '../../../reducers/StepReducer';
 import Header2 from '../../../components/Header2';
+import BallonPopup from '../../../components/BallonPopup';
 
 export type RecipeEdit = {
   id: number;
@@ -43,6 +44,12 @@ const ingredientsTemp = [
   { id: 3, ingredient: 'Pão', ingredientText: '2 pães francês' }
 ];
 
+const difficultyNames = {
+  1: 'Fácil',
+  2: 'Médio',
+  3: 'Difícil'
+};
+
 const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
   const [steps, stepDispatch] = useReducer(stepReducer, [
     { step: 1, text: '' }
@@ -58,11 +65,14 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
       ingredientsTemp
     );
 
+  const [diff, setDiff] = useState<1 | 2 | 3>(1);
+  const [showDifDropdown, setShowDifDropdown] = useState(false);
+  const diffDropdown = useRef<HTMLButtonElement>(null);
+
   const titleController = useRef<HTMLInputElement>(null);
   const descriptionController = useRef<HTMLTextAreaElement>(null);
   const prepTimeController = useRef<HTMLInputElement>(null);
   const cookTimeController = useRef<HTMLInputElement>(null);
-  const difficultyController = useRef<HTMLSelectElement>(null);
   const servesController = useRef<HTMLInputElement>(null);
 
   const [ingredientName, setIngredientName] = useState<string>('');
@@ -78,7 +88,6 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
       recipe.prepTime.toString();
     (cookTimeController.current as HTMLInputElement).value =
       recipe.cookTime.toString();
-    (difficultyController.current as HTMLSelectElement).value = 'Fácil';
     (servesController.current as HTMLInputElement).value =
       recipe.serves.toString();
   }, [recipe]);
@@ -278,61 +287,120 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
               minutos
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="relative flex flex-col gap-3">
               <label
                 htmlFor="difficulty"
                 className="block font-bold text-gray-900 dark:text-gray-400"
               >
                 Selecione a dificuldade
               </label>
-              {/* <select
-                ref={difficultyController}
-                id="difficulty"
-                className="block w-20 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-              >
-                <option value={Dificulty.easy} defaultValue="true">
-                  Fácil
-                </option>
-                <option value={Dificulty.medium}>Médio</option>
-                <option value={Dificulty.hard}>Difícil</option>
-              </select> */}
 
-              <button
-                id="dropdownDefault"
-                data-dropdown-toggle="dropdown"
-                className="inline-flex w-44 items-center rounded-lg bg-blue-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"
-              >
-                Dropdown button{' '}
-                <svg
-                  className="ml-2 h-4 w-4"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
+              {/*  */}
+
+              <div className="relative">
+                <button
+                  id="dropdownDefault"
+                  data-dropdown-toggle="dropdown"
+                  className="inline-flex w-24 items-center rounded-lg bg-blue-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  type="button"
+                  onClick={() => setShowDifDropdown((prev) => !prev)}
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-              <div
+                  {difficultyNames[diff]}
+                  <svg
+                    className="ml-2 h-4 w-4"
+                    aria-hidden="true"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {showDifDropdown && (
+                  <BallonPopup
+                    setFalse={() => setShowDifDropdown(false)}
+                    sameWidth
+                    popUpSide="left"
+                    ref={diffDropdown}
+                  >
+                    <ul
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                      aria-labelledby="dropdownDefault"
+                    >
+                      <li className=" hover:text-gray-50 hover:dark:bg-gray-500">
+                        <button
+                          className="h-full w-full cursor-pointer py-0.5 px-1"
+                          type="button"
+                          onClick={() => {
+                            setDiff(1);
+                            setShowDifDropdown(false);
+                          }}
+                        >
+                          Fácil
+                        </button>
+                      </li>
+                      <li className=" hover:text-gray-50 hover:dark:bg-gray-500">
+                        <button
+                          className="h-full w-full cursor-pointer py-0.5 px-1"
+                          type="button"
+                          onClick={() => {
+                            setDiff(2);
+                            setShowDifDropdown(false);
+                          }}
+                        >
+                          Médio
+                        </button>
+                      </li>
+                      <li className=" hover:text-gray-50 hover:dark:bg-gray-500">
+                        <button
+                          className="h-full w-full cursor-pointer py-0.5 px-1"
+                          type="button"
+                          onClick={() => {
+                            setDiff(3);
+                            setShowDifDropdown(false);
+                          }}
+                        >
+                          Difícil
+                        </button>
+                      </li>
+                    </ul>
+                  </BallonPopup>
+                )}
+              </div>
+              {/* <div
                 id="dropdown"
-                className="z-10 hidden w-44 divide-y divide-gray-100 rounded bg-white shadow dark:bg-gray-700"
+                className={`absolute bottom-0 z-10 ${
+                  showDifDropdown ? '' : 'hidden'
+                } w-44 divide-y divide-gray-100 rounded bg-white shadow dark:bg-gray-700`}
               >
                 <ul
                   className="py-1 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdownDefault"
                 >
-                  <li>Fácil</li>
-                  <li>Médio</li>
-                  <li>Difícil</li>
+                  <li>
+                    <button type="button" onClick={() => setDiff(1)}>
+                      Fácil
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" onClick={() => setDiff(2)}>
+                      Médio
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" onClick={() => setDiff(3)}>
+                      Difícil
+                    </button>
+                  </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex items-center gap-3">

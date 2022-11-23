@@ -147,19 +147,25 @@ const Header2: React.FC = () => {
 
         {/* login/register or profile image */}
         {session?.user ? (
-          <div
-            ref={profileRef}
-            type="button"
-            className="relative flex h-7 w-8 cursor-pointer items-center justify-center"
-            onClick={() => setProfilePopup((prev) => !prev)}
-          >
-            <Image
-              layout="fill"
-              alt="imagem de perfil"
-              src="/profileIcon.png"
-            />
+          <div className="relative">
+            <button
+              ref={profileRef}
+              type="button"
+              className="relative flex h-7 w-8 cursor-pointer items-center justify-center"
+              onClick={() => setProfilePopup((prev) => !prev)}
+            >
+              <Image
+                layout="fill"
+                alt="imagem de perfil"
+                src="/profileIcon.png"
+              />
+            </button>
             {profilePopup && (
-              <BallonPopup popUpSide="right" ref={profileRef}>
+              <BallonPopup
+                setFalse={() => setProfilePopup(false)}
+                popUpSide="right"
+                ref={profileRef}
+              >
                 <button
                   type="button"
                   className="flex w-full items-center justify-start border-b-[1px] !border-b-gray-400 px-6 py-2 pl-3 hover:bg-slate-300"

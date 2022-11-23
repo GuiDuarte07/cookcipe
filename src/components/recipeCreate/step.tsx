@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TiDelete } from 'react-icons/ti';
 
 type Props = {
@@ -17,6 +17,7 @@ const CreateStep: React.FC<Props> = ({ step, text, onChange, onClick }) => {
         type="button"
         onMouseEnter={() => setHover(true)}
         onMouseOut={() => setHover(false)}
+        onBlur={() => setHover(false)}
         onClick={() => onClick(step)}
         className="flex h-9 w-9 items-center justify-center rounded border-2 border-solid border-black bg-orange-400 dark:border-white dark:bg-orange-500"
       >

@@ -1,46 +1,32 @@
-import React, {
-  forwardRef,
-  LegacyRef,
-  MutableRefObject,
-  useEffect,
-  useState
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
   popUpSide: 'left' | 'right';
   children?: React.ReactNode;
-  sameWidth?: boolean;
+  sameWidth?: true;
   setFalse: () => void;
 };
 
-const BallonPopup = (
-  { popUpSide, sameWidth, setFalse, children }: Props,
-  ref: LegacyRef<HTMLElement> | undefined
-) => {
+const BallonPopup = ({ popUpSide, children, sameWidth, setFalse }: Props) => {
   const [parentHeight, setParentHeight] = useState<number>();
   const [elementWidth, setElementWidth] = useState<number>();
+  const ballonRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setParentHeight(
-      (
-        (ref as MutableRefObject<HTMLElement>)?.current
-          ?.previousElementSibling as HTMLElement
-      )?.offsetHeight
+      (ballonRef.current?.previousElementSibling as HTMLElement)?.offsetHeight
     );
 
     if (sameWidth) {
       setElementWidth(
-        (
-          (ref as MutableRefObject<HTMLElement>)?.current
-            ?.previousElementSibling as HTMLElement
-        )?.offsetWidth
+        (ballonRef.current?.previousElementSibling as HTMLElement)?.offsetWidth
       );
     }
 
     return () => {
       setParentHeight(0);
     };
-  }, [ref, sameWidth, parentHeight, elementWidth]);
+  }, [sameWidth, parentHeight, elementWidth]);
 
   useEffect(() => {
     const clickOutEvent = (e: MouseEvent) => {
@@ -49,10 +35,7 @@ const BallonPopup = (
       let isParent = false;
 
       while (!!parentOfParent && !isParent) {
-        if (
-          parentOfParent ===
-          (ref as MutableRefObject<HTMLElement>)?.current?.parentElement
-        ) {
+        if (parentOfParent === ballonRef.current?.parentElement) {
           isParent = true;
         } else {
           parentOfParent = parentOfParent?.parentElement ?? undefined;
@@ -66,11 +49,11 @@ const BallonPopup = (
     return () => {
       document.removeEventListener('mousedown', clickOutEvent);
     };
-  }, []);
+  }, [ballonRef, setFalse]);
 
   return (
     <div
-      ref={ref}
+      ref={ballonRef}
       style={{
         top: `${parentHeight ? parentHeight + 10 : 8}px`,
         ...(sameWidth ? { width: elementWidth } : {}),
@@ -83,4 +66,4 @@ const BallonPopup = (
   );
 };
 
-export default forwardRef(BallonPopup);
+export default BallonPopup;

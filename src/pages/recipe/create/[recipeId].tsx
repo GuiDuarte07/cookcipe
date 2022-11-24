@@ -328,7 +328,6 @@ const CreateRecipe: NextPage<Props> = ({ homeAppliance, recipe }) => {
                     setFalse={() => setShowDifDropdown(false)}
                     sameWidth
                     popUpSide="left"
-                    ref={diffDropdown}
                   >
                     <ul
                       className="py-1 text-sm text-gray-700 dark:text-gray-200"

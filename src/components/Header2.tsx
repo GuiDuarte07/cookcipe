@@ -2,7 +2,7 @@ import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useRef, useState } from 'react';
+import React, { RefObject, useRef, useState } from 'react';
 import { BsSearch, BsFillPersonLinesFill } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { GrLogout } from 'react-icons/gr';
@@ -18,7 +18,7 @@ const Header2: React.FC = () => {
   const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
 
-  const profileRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLButtonElement>(null);
   const [profilePopup, setProfilePopup] = useState(false);
 
   const changeTheme = () => {
@@ -164,7 +164,6 @@ const Header2: React.FC = () => {
               <BallonPopup
                 setFalse={() => setProfilePopup(false)}
                 popUpSide="right"
-                ref={profileRef}
               >
                 <button
                   type="button"

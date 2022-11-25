@@ -11,6 +11,7 @@ const BallonPopup = ({ popUpSide, children, sameWidth, setFalse }: Props) => {
   const [parentHeight, setParentHeight] = useState<number>();
   const [elementWidth, setElementWidth] = useState<number>();
   const ballonRef = useRef<HTMLDivElement>(null);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
 
   useEffect(() => {
     setParentHeight(
@@ -22,6 +23,8 @@ const BallonPopup = ({ popUpSide, children, sameWidth, setFalse }: Props) => {
         (ballonRef.current?.previousElementSibling as HTMLElement)?.offsetWidth
       );
     }
+
+    setShowPopup(true);
 
     return () => {
       setParentHeight(0);
@@ -55,6 +58,7 @@ const BallonPopup = ({ popUpSide, children, sameWidth, setFalse }: Props) => {
     <div
       ref={ballonRef}
       style={{
+        ...(!showPopup && { display: 'none' }),
         top: `${parentHeight ? parentHeight + 10 : 8}px`,
         ...(sameWidth ? { width: elementWidth } : {}),
         ...(popUpSide === 'left' ? { left: '0px' } : { right: '0px' })

@@ -68,17 +68,17 @@ const Header2: React.FC = () => {
             <ul className="mt-4 flex flex-col rounded-lg border bg-inherit   p-4  md:mt-0 md:flex-row md:space-x-8 md:border-0  md:text-sm md:font-medium ">
               <li className="block border-b-2 py-2 pl-3 pr-4 text-black dark:text-white md:bg-transparent md:p-0">
                 <Link href="/" aria-current="page">
-                  Home
+                  Inicio
                 </Link>
               </li>
               <li className="block border-b-2 py-2 pl-3 pr-4 text-black dark:text-white md:bg-transparent md:p-0">
-                <Link href="/">About</Link>
+                <Link href="/">Destaques</Link>
               </li>
               <li className="block border-b-2 py-2 pl-3 pr-4 text-black dark:text-white md:bg-transparent md:p-0">
-                <Link href="/">Services</Link>
+                <Link href="/">Receitas</Link>
               </li>
               <li className="block border-b-2 py-2 pl-3 pr-4 text-black dark:text-white md:bg-transparent md:p-0">
-                <Link href="/">Pricing</Link>
+                <Link href="/">Sobre</Link>
               </li>
             </ul>
           </div>

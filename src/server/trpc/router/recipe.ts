@@ -1,10 +1,10 @@
-import { router, publicProcedure, protectedProcedure } from "../trpc";
-import { z } from "zod";
+import { z } from 'zod';
+import { router, publicProcedure, protectedProcedure } from '../trpc';
 
 export const recipeRoutes = router({
   // createRecipe: protectedProcedure
   //   .input(z.object({
-      
+
   //   }))
   //   .mutation(({ ctx }) => {
   //     ctx.prisma.recipe.create({
@@ -24,14 +24,16 @@ export const recipeRoutes = router({
   //           connect: {id: ctx.session.user.id}
   //         }
   //       },
-        
+
   //     })
   //   }),
   getRecipes: publicProcedure
-    .input(z.object({
-      skipCount: z.number()
-    }))
-    .mutation(async ({ctx, input}) => {
+    .input(
+      z.object({
+        skipCount: z.number()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
       const recipes = await ctx.prisma.recipe.findMany({
         where: {
           published: true
@@ -46,9 +48,9 @@ export const recipeRoutes = router({
           likes: true,
           difficulty: true,
           serves: true,
-          description: true,
+          description: true
         }
-      })
+      });
 
       return recipes;
     })
